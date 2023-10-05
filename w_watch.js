@@ -9,7 +9,7 @@ class WWatch {
   chavesDeMutacao = ["childList", "attributes", "characterData", "subtree"];
   
   obterWatchersConfigurados() {
-    return document.querySelectorAll("[w-watch]");
+    return document.querySelectorAll("[w-watch]:not([w-watch-ready])");
   }
   
   /**
@@ -73,6 +73,7 @@ class WWatch {
     listaWatchers.forEach(watcher => {
       const wathcerConfigs = this.obterConfiguracoesDoWatcher(watcher)
       this.adicionarEventos(watcher, wathcerConfigs)
+      watcher.setAttribute('w-watch-ready','')
     })
   }
 }

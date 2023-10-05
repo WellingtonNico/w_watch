@@ -23,14 +23,32 @@
 			       min="0"
 			       max="100"
 			       step="0.5">
-			<span>
-				<output id="id_output"
-				        w-watch="#id_input_range:input"
-				        w-effect-0="this.value=Number(this.alvo.value).toFixed(1)">
-					50.0
-				</output>
-				%
-			</span>
+			<div class="position-relative bg-success overflow-visible">
+				<span class="d-flex rounded px-2 position-absolute"
+				      style="background-color: red;left:calc(50%);transform:translateX(-50%)">
+					<output w-watch="#id_input_range:input"
+					        w-effect-0="
+					          this.value=Number(this.alvo.value).toFixed(1)
+					          this.parentNode.style.left=`calc(${this.alvo.value}%)`
+					          let bgColor,color
+					          if(this.alvo.value>80){
+					            bgColor = 'red'
+					            color='white'
+					          }else if(this.alvo.value>50){
+					            bgColor = 'yellow'
+					            color = 'black'
+					          }else{
+					            bgColor = 'green'
+					            color = 'white'
+					          }
+					          this.parentNode.style.backgroundColor = bgColor
+					          this.parentNode.style.color = color
+									">
+						50.0
+					</output>
+					%
+				</span>
+			</div>
 		</div>
 	</div>
 </div>

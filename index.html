@@ -17,6 +17,8 @@
 		<h1>W-Watch</h1>
 
 		<br>
+		<br>
+		<br>
 
 		<div class="d-flex flex-column">
 			<small class="my-3">Exemplo de atualização de componente diretamente no html</small>
@@ -88,6 +90,68 @@
 			     w-watch="#id_switch_2:change"
 			     w-effect-0="componente_1.style.display='none';this.style.display='block'"
 			><h1>Componente 2</h1></div>
+		</div>
+
+		<br>
+		<br>
+		<br>
+
+		<small>Contagem de elementos</small>
+
+		<h6>
+			<output w-watch="#id_tbody:childList"
+			        w-effect-0="this.value = this.alvo.children.length"></output>
+			linhas exibidas
+		</h6>
+
+		<div class="table-responsive">
+			<table class="table table-striped">
+				<thead>
+				<tr>
+					<th>id</th>
+					<th>nome</th>
+					<th class="text-end">ação</th>
+				</tr>
+				</thead>
+				<tbody id="id_tbody">
+				<tr>
+					<td>1</td>
+					<td>teste</td>
+					<td class="text-end">
+						<button onclick="this.closest('tr').remove()" class="btn btn-danger">remover</button>
+					</td>
+				</tr>
+				<tr>
+					<td>1</td>
+					<td>teste</td>
+					<td class="text-end">
+						<button onclick="this.closest('tr').remove()" class="btn btn-danger">remover</button>
+					</td>
+				</tr>
+				<tr>
+					<td>1</td>
+					<td>teste</td>
+					<td class="text-end">
+						<button onclick="this.closest('tr').remove()" class="btn btn-danger">remover</button>
+					</td>
+				</tr>
+				<tr>
+					<td>1</td>
+					<td>teste</td>
+					<td class="text-end">
+						<button onclick="this.closest('tr').remove()" class="btn btn-danger">remover</button>
+					</td>
+				</tr>
+				<tr>
+					<td>1</td>
+					<td>teste</td>
+					<td class="text-end">
+						<button onclick="this.closest('tr').remove()" class="btn btn-danger">remover</button>
+					</td>
+				</tr>
+				</tbody>
+
+			</table>
 		</div>
 	</div>
 </div>

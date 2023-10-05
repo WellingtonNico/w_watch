@@ -27,6 +27,7 @@
 				<span class="d-flex rounded px-2 position-absolute"
 				      style="background-color: red;left:calc(50%);transform:translateX(-50%)">
 					<output w-watch="#id_input_range:input"
+					        w-effect-0-dry-run="true"
 					        w-effect-0="
 					          this.value=Number(this.alvo.value).toFixed(1)
 					          this.parentNode.style.left=`calc(${this.alvo.value}%)`

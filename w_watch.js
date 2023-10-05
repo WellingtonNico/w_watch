@@ -1,9 +1,10 @@
 class WWatch {
   /**
-   * @typedef {Object} WatchNodeConfig
+   * @typedef {Object} WatcherConfig
    * @property {HTMLElement} alvo - seletor css do alvo
-   * @property {string} tipoWatch - pode ser um evento específico ou algum evento de mutação
-   * @property {string} watchEffect - string sendo a função a ser disparada ao rodar o evento
+   * @property {string} tipo - pode ser um evento específico ou algum evento de mutação
+   * @property {string} efeito - string sendo a função a ser disparada ao rodar o evento
+   * @property {boolean} rodarSeco - se verdadeiro irá rodar um evento seco se possível
    */
   
   chavesDeMutacao = ["childList", "attributes", "characterData", "subtree"];
@@ -14,27 +15,27 @@ class WWatch {
   
   /**
    * @param {HTMLElement} watcher
-   * @returns {WatchNodeConfig[]} lista de configurações do elemento
+   * @returns {WatcherConfig[]} lista de configurações do elemento
    */
   obterConfiguracoesDoWatcher(watcher) {
     const watchList = watcher.getAttribute("w-watch").split(",");
     const watchConfigList = [];
     watchList.forEach((watch, index) => {
-      const [seletor, tipoWatch] = watch.split(":");
+      const [seletor, tipo] = watch.split(":");
       let alvo;
       try {
         alvo = document.querySelector(seletor);
       } catch {
         console.warn(`WWatch: não foi possível localizar o alvo`);
       }
-      const watchEffect = (
+      const efeito = (
         watcher.getAttribute(`w-effect-${index}`) ?? ""
       ).trim();
       // se faltar a definição do evento ou o efeito para ordem do evento a configuração não ocorrerá
-      if (!tipoWatch || !watchEffect || !alvo) {
+      if (!tipo || !efeito || !alvo) {
         console.warn(`WWatch: pulando configuração do seletor ${seletor}`);
       } else {
-        watchConfigList.push({alvo, tipoWatch, watchEffect});
+        watchConfigList.push({alvo, tipo, efeito});
       }
     });
     return watchConfigList;
@@ -43,25 +44,25 @@ class WWatch {
   /**
    *
    * @param {HTMLElement} watcher
-   * @param {WatchNodeConfig[]} watchConfigList
+   * @param {WatcherConfig[]} watchConfigList
    */
   adicionarEventos(watcher, watchConfigList) {
     watchConfigList.forEach((watchConfig) => {
       const alvo = watchConfig.alvo
-      const func = new Function(watchConfig.watchEffect)
+      const func = new Function(watchConfig.efeito)
       watcher['alvo'] = alvo
       
-      if (this.chavesDeMutacao.includes(watchConfig.tipoWatch)) {
+      if (this.chavesDeMutacao.includes(watchConfig.tipo)) {
         const observer = new MutationObserver((mutationsList, _) => {
           mutationsList.forEach((mutation) => {
-            if (mutation.type === watchConfig.tipoWatch) {
+            if (mutation.type === watchConfig.tipo) {
               func.call(watcher)
             }
           });
         });
-        observer.observe(watchConfig.alvo, {[watchConfig.tipoWatch]: true});
+        observer.observe(watchConfig.alvo, {[watchConfig.tipo]: true});
       } else {
-        watchConfig.alvo.addEventListener(watchConfig.tipoWatch, (event) => {
+        watchConfig.alvo.addEventListener(watchConfig.tipo, (event) => {
           func.call(watcher)
         })
       }

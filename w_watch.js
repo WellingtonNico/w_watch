@@ -28,6 +28,7 @@ class WWatch {
       } catch {
         console.warn(`WWatch: não foi possível localizar o alvo`);
       }
+      const rodarSeco = watcher.getAttribute(`w-effect-${index}-dry-run`)??''=='true'
       const efeito = (
         watcher.getAttribute(`w-effect-${index}`) ?? ""
       ).trim();
@@ -35,7 +36,7 @@ class WWatch {
       if (!tipo || !efeito || !alvo) {
         console.warn(`WWatch: pulando configuração do seletor ${seletor}`);
       } else {
-        watchConfigList.push({alvo, tipo, efeito});
+        watchConfigList.push({alvo, tipo, efeito,rodarSeco});
       }
     });
     return watchConfigList;
@@ -47,24 +48,26 @@ class WWatch {
    * @param {WatcherConfig[]} watchConfigList
    */
   adicionarEventos(watcher, watchConfigList) {
-    watchConfigList.forEach((watchConfig) => {
-      const alvo = watchConfig.alvo
-      const func = new Function(watchConfig.efeito)
+    watchConfigList.forEach((watcherConfig) => {
+      const alvo = watcherConfig.alvo
+      const func = new Function(watcherConfig.efeito)
       watcher['alvo'] = alvo
-      
-      if (this.chavesDeMutacao.includes(watchConfig.tipo)) {
+      if (this.chavesDeMutacao.includes(watcherConfig.tipo)) {
         const observer = new MutationObserver((mutationsList, _) => {
           mutationsList.forEach((mutation) => {
-            if (mutation.type === watchConfig.tipo) {
+            if (mutation.type === watcherConfig.tipo) {
               func.call(watcher)
             }
           });
         });
-        observer.observe(watchConfig.alvo, {[watchConfig.tipo]: true});
+        observer.observe(watcherConfig.alvo, {[watcherConfig.tipo]: true});
       } else {
-        watchConfig.alvo.addEventListener(watchConfig.tipo, (event) => {
+        watcherConfig.alvo.addEventListener(watcherConfig.tipo, (event) => {
           func.call(watcher)
         })
+      }
+      if(watcherConfig.rodarSeco){
+        func.call(watcher)
       }
     });
   }

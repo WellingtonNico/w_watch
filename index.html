@@ -30,7 +30,6 @@
 				<span class="d-flex rounded px-2 position-absolute"
 				      style="background-color: red;left:calc(50%);transform:translateX(-50%)">
 					<output w-watch="#id_input_range:input"
-					        w-effect-0-dry-run="true"
 					        w-effect-0="
 					          this.value=Number(this.alvo.value).toFixed(1)
 					          this.parentNode.style.left=`calc(${this.alvo.value}%)`
@@ -53,6 +52,42 @@
 					%
 				</span>
 			</div>
+		</div>
+
+		<br>
+		<br>
+		<br>
+
+		<div>
+			<small>Ocultar e exibir componentes</small>
+			<div class="d-flex justify-content-between">
+
+				<!-- radio 1 -->
+				<div class="form-check form-switch">
+					<input name="name_teste" class="form-check-input" type="radio" role="switch" id="id_switch_1">
+					<label class="form-check-label" for="id_switch_1">Exibe componente 1</label>
+				</div>
+
+				<!-- radio 2 -->
+				<div class="form-check form-switch">
+					<input name="name_teste" class="form-check-input" type="radio" role="switch" id="id_switch_2" checked>
+					<label class="form-check-label" for="id_switch_2">Exibe componente 2</label>
+				</div>
+			</div>
+
+			<!-- componente 1 -->
+			<div id="componente_1"
+			     class="bg-success"
+			     w-watch="#id_switch_1:change"
+			     w-effect-0="componente_2.style.display='none';this.style.display='block'"
+			><h1>Componente 1</h1></div>
+
+			<!-- componente 2 -->
+			<div id="componente_2"
+			     class="bg-primary"
+			     w-watch="#id_switch_2:change"
+			     w-effect-0="componente_1.style.display='none';this.style.display='block'"
+			><h1>Componente 2</h1></div>
 		</div>
 	</div>
 </div>

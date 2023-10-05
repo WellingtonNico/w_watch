@@ -74,6 +74,7 @@ class WWatch {
   
   // TODO: add attributo para disparo de evento automático w-event-change="checkBoxAlterada" ou dinamico sendo w-event-mouseenter
   // TODO: add observer para rodar novamente a qualquer alteração na dom
+  // TODO: add opcional para declarar somente um w-effect
   
   inicializar() {
     const listaWatchers = [...this.obterWatchers()]

@@ -8,7 +8,7 @@ class WWatch {
   
   chavesDeMutacao = ["childList", "attributes", "characterData", "subtree"];
   
-  obterWatchersConfigurados() {
+  obterWatchers() {
     return document.querySelectorAll("[w-watch]:not([w-watch-ready])");
   }
   
@@ -69,7 +69,7 @@ class WWatch {
   }
   
   inicializar() {
-    const listaWatchers = [...this.obterWatchersConfigurados()]
+    const listaWatchers = [...this.obterWatchers()]
     listaWatchers.forEach(watcher => {
       const wathcerConfigs = this.obterConfiguracoesDoWatcher(watcher)
       this.adicionarEventos(watcher, wathcerConfigs)

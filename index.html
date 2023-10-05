@@ -12,8 +12,8 @@
 </head>
 <body>
 
-<div class="row justify-content-center pt-5">
-	<div class="col col-6 text-center">
+<div class="row justify-content-center pt-5 mx-0">
+	<div class="col col-11 col-md-6 text-center">
 		<h1>W-Watch</h1>
 
 		<br>
@@ -22,13 +22,18 @@
 
 		<div class="d-flex flex-column">
 			<small class="my-3">Exemplo de atualização de componente diretamente no html</small>
+
+			<!-- slider -->
 			<input id="id_input_range"
 			       type="range"
 			       value="50"
 			       min="0"
 			       max="100"
 			       step="0.5">
+
 			<div class="position-relative bg-success overflow-visible mt-1">
+
+				<!-- span com porcentagem -->
 				<span class="d-flex rounded px-2 position-absolute"
 				      style="background-color: red;left:calc(50%);transform:translateX(-50%)">
 					<output w-watch="#id_input_range:input"
@@ -53,6 +58,7 @@
 					</output>
 					%
 				</span>
+
 			</div>
 		</div>
 
@@ -80,13 +86,15 @@
 			<!-- componente 1 -->
 			<div id="componente_1"
 			     class="bg-success"
-			     w-watch="#id_switch_1:change"
+			     w-watch="#id_switch_1:change,#id_switch_1:mouseenter,#id_switch_1:mouseleave"
 			     w-effect-0="componente_2.style.display='none';this.style.display='block'"
+			     w-effect-1="componente_2.style.backgroundColor='yellow';"
+			     w-effect-2="componente_2.style.backgroundColor='blue'"
 			><h1>Componente 1</h1></div>
 
 			<!-- componente 2 -->
 			<div id="componente_2"
-			     class="bg-primary"
+			     style="background-color: blue"
 			     w-watch="#id_switch_2:change"
 			     w-effect-0="componente_1.style.display='none';this.style.display='block'"
 			><h1>Componente 2</h1></div>
@@ -104,10 +112,34 @@
 			linhas exibidas
 		</h6>
 
+		<h6>
+			<output w-watch="#id_tbody:checkboxChange,#id_tbody:childList"
+			        w-effect-0="this.value = this.alvo.querySelectorAll('input:checked').length"
+			        w-effect-1="this.value = this.alvo.querySelectorAll('input:checked').length"
+			></output>
+			Checkbox Selecionadas
+		</h6>
+
+		<h6>
+			Total =
+			<output w-watch="#id_tbody:checkboxChange,#id_tbody:childList"
+			        w-effect-0="
+			          this.value =
+			            [...this.alvo.querySelectorAll('input:checked')].reduce((p,a)=>p+Number(a.value),0)
+								"
+			        w-effect-1="
+			          this.value =
+			            [...this.alvo.querySelectorAll('input:checked')].reduce((p,a)=>p+Number(a.value),0)
+								"
+			></output>
+
+		</h6>
+
 		<div class="table-responsive">
 			<table class="table table-striped">
 				<thead>
 				<tr>
+					<th></th>
 					<th>id</th>
 					<th>nome</th>
 					<th class="text-end">ação</th>
@@ -115,6 +147,10 @@
 				</thead>
 				<tbody id="id_tbody">
 				<tr>
+					<td>
+						<input value="333" type="checkbox" class="form-check"
+						       onchange="id_tbody.dispatchEvent(new Event('checkboxChange'))">
+					</td>
 					<td>1</td>
 					<td>teste</td>
 					<td class="text-end">
@@ -122,6 +158,10 @@
 					</td>
 				</tr>
 				<tr>
+					<td>
+						<input value="333" type="checkbox" class="form-check"
+						       onchange="id_tbody.dispatchEvent(new Event('checkboxChange'))">
+					</td>
 					<td>1</td>
 					<td>teste</td>
 					<td class="text-end">
@@ -129,6 +169,10 @@
 					</td>
 				</tr>
 				<tr>
+					<td>
+						<input value="333" type="checkbox" class="form-check"
+						       onchange="id_tbody.dispatchEvent(new Event('checkboxChange'))">
+					</td>
 					<td>1</td>
 					<td>teste</td>
 					<td class="text-end">
@@ -136,6 +180,10 @@
 					</td>
 				</tr>
 				<tr>
+					<td>
+						<input value="333" type="checkbox" class="form-check"
+						       onchange="id_tbody.dispatchEvent(new Event('checkboxChange'))">
+					</td>
 					<td>1</td>
 					<td>teste</td>
 					<td class="text-end">
@@ -143,6 +191,21 @@
 					</td>
 				</tr>
 				<tr>
+					<td>
+						<input value="333" type="checkbox" class="form-check"
+						       onchange="id_tbody.dispatchEvent(new Event('checkboxChange'))">
+					</td>
+					<td>1</td>
+					<td>teste</td>
+					<td class="text-end">
+						<button onclick="this.closest('tr').remove()" class="btn btn-danger">remover</button>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input value="333" type="checkbox" class="form-check"
+						       onchange="id_tbody.dispatchEvent(new Event('checkboxChange'))">
+					</td>
 					<td>1</td>
 					<td>teste</td>
 					<td class="text-end">

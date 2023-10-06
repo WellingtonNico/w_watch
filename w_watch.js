@@ -201,3 +201,5 @@ class WWatch {
     this.criarObserver()
   }
 }
+
+new WWatch().inicializar()

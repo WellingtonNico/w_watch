@@ -7,9 +7,15 @@ class WWatch {
    * @property {boolean} rodarSeco - se verdadeiro irá rodar um evento seco se possível
    */
   
+  atributoWWatcherConfigurado  = 'w-watch-ready'
+  
   chavesDeMutacao = ["childList", "attributes", "characterData", "subtree"];
   
-  obterWatchers() {
+  obterWTriggers() {
+    return document.querySelectorAll( `[w-watch]:not([${this.atributoWWatcherConfigurado}])`);
+  }
+  
+  obterWWatchers() {
     return document.querySelectorAll("[w-watch]:not([w-watch-ready])");
   }
   
@@ -20,7 +26,7 @@ class WWatch {
   obterConfiguracoesDoWatcher(watcher) {
     const watchList = watcher.getAttribute("w-watch").split(",");
     const watchConfigList = [];
-    const efeitoPadrao = watcher.getAttribute('w-effect')??''
+    const efeitoPadrao = watcher.getAttribute('w-effect') ?? ''
     watchList.forEach((watch, index) => {
       const [seletor, tipo] = watch.split(":");
       let alvo;
@@ -29,16 +35,16 @@ class WWatch {
       } catch {
         console.warn(`WWatch: não foi possível localizar o alvo`);
       }
-      const rodarSeco = watcher.getAttribute(`w-effect-${index}-dry-run`)??'true'=='true'
+      const rodarSeco = watcher.getAttribute(`w-effect-${index}-dry-run`) ?? 'true' == 'true'
       let efeito = (
         watcher.getAttribute(`w-effect-${index}`) ?? ""
       ).trim();
-      efeito = efeito?efeito:efeitoPadrao
+      efeito = efeito ? efeito : efeitoPadrao
       // se faltar a definição do evento ou o efeito para ordem do evento a configuração não ocorrerá
       if (!tipo || !efeito || !alvo) {
         console.warn(`WWatch: pulando configuração do seletor ${seletor}`);
       } else {
-        watchConfigList.push({alvo, tipo, efeito,rodarSeco});
+        watchConfigList.push({alvo, tipo, efeito, rodarSeco});
       }
     });
     return watchConfigList;
@@ -68,22 +74,22 @@ class WWatch {
           func.call(watcher)
         })
       }
-      if(watcherConfig.rodarSeco){
+      if (watcherConfig.rodarSeco) {
         func.call(watcher)
       }
     });
   }
   
+  
   // TODO: add attributo para disparo de evento automático w-event-change="checkBoxAlterada" ou dinamico sendo w-event-mouseenter
   // TODO: add observer para rodar novamente a qualquer alteração na dom
-  // TODO: add opcional para declarar somente um w-effect
   
   inicializar() {
-    const listaWatchers = [...this.obterWatchers()]
+    const listaWatchers = [...this.obterWWatchers()]
     listaWatchers.forEach(watcher => {
       const wathcerConfigs = this.obterConfiguracoesDoWatcher(watcher)
       this.adicionarEventos(watcher, wathcerConfigs)
-      watcher.setAttribute('w-watch-ready','')
+      watcher.setAttribute(this.atributoWWatcherConfigurado, '')
     })
   }
 }

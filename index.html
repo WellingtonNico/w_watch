@@ -85,7 +85,11 @@
 			<!-- componente 1 -->
 			<div id="componente_1"
 			     class="bg-success"
-			     w-watch="#id_switch_1:change,#id_switch_1:mouseenter,#id_switch_1:mouseleave"
+			     w-watch="
+			      #id_switch_1:change,
+			      #id_switch_1:mouseenter,
+			      #id_switch_1:mouseleave 
+					"
 			     w-effect-0="componente_2.style.display='none';this.style.display='block'"
 			     w-effect-1="componente_2.style.backgroundColor='yellow';"
 			     w-effect-2="componente_2.style.backgroundColor='blue'"

@@ -32,12 +32,12 @@ class WWatch {
    * @returns {WWatcherConfig[]} lista de configurações do elemento
    */
   obterConfiguracoesDoWWatcher(watcher) {
-    const watchList = watcher.getAttribute("w-watch").split(",");
+    const watchList = watcher.getAttribute("w-watch").trim().split(",");
     /** @type {WWatcherConfig[]} */
     const watchConfigList = [];
     const efeitoPadrao = watcher.getAttribute('w-effect') ?? ''
     watchList.forEach((config, index) => {
-      const [seletor, tipo] = config.split(":");
+      const [seletor, tipo] = config.trim().split(":");
       let watch;
       try {
         if (['document', 'window'].includes(seletor)) {
@@ -103,11 +103,11 @@ class WWatch {
    * @returns {WTriggerConfig[]}
    */
   obterConfiguracoesDoWTrigger(wtrigger) {
-    const triggers = wtrigger.getAttribute('w-trigger').split(',')
+    const triggers = wtrigger.getAttribute('w-trigger').trim().split(',')
     /** @type {WTriggerConfig[]} */
     const wtriggerConfigs = []
     triggers.forEach(trigger => {
-      let [tipo, nomeEvento, seletorDispatcher] = trigger.split(':')
+      let [tipo, nomeEvento, seletorDispatcher] = trigger.trim().split(':')
       if (!seletorDispatcher) {
         seletorDispatcher = 'document'
       }

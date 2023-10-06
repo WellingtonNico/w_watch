@@ -121,8 +121,9 @@
 			Total =
 			<output w-watch="#id_tbody:checkboxChange,#id_tbody:childList"
 			        w-effect="
-			          this.value =
-			            [...this.alvo.querySelectorAll('input:checked')].reduce((p,a)=>p+Number(a.value),0)
+			          this.value = [
+			            ...this.alvo.querySelectorAll('input:checked')
+			          ].reduce((p,a)=>p+Number(a.value),0)
 								"
 			></output>
 

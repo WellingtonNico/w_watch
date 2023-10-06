@@ -37,13 +37,13 @@
 				      style="background-color: red;left:calc(50%);transform:translateX(-50%)">
 					<output w-watch="#id_input_range:input"
 					        w-effect-0="
-					          this.value=Number(this.alvo.value).toFixed(1)
-					          this.parentNode.style.left=`calc(${this.alvo.value}%)`
+					          this.value=Number(this.watch.value).toFixed(1)
+					          this.parentNode.style.left=`calc(${this.watch.value}%)`
 					          let bgColor,color
-					          if(this.alvo.value>80){
+					          if(this.watch.value>80){
 					            bgColor = 'red'
 					            color='white'
-					          }else if(this.alvo.value>50){
+					          }else if(this.watch.value>50){
 					            bgColor = 'yellow'
 					            color = 'black'
 					          }else{
@@ -106,13 +106,13 @@
 
 		<h6>
 			<output w-watch="#id_tbody:childList"
-			        w-effect="this.value = this.alvo.children.length - 1"></output>
+			        w-effect="this.value = this.watch.children.length - 1"></output>
 			linhas exibidas
 		</h6>
 
 		<h6>
 			<output w-watch="#id_tbody:checkboxChange,#id_tbody:childList"
-			        w-effect="this.value = this.alvo.querySelectorAll('input:checked').length"
+			        w-effect="this.value = this.watch.querySelectorAll('input:checked').length"
 			></output>
 			Checkbox Selecionadas
 		</h6>
@@ -122,7 +122,7 @@
 			<output w-watch="#id_tbody:checkboxChange,#id_tbody:childList"
 			        w-effect="
 			          this.value = [
-			            ...this.alvo.querySelectorAll('input:checked')
+			            ...this.watch.querySelectorAll('input:checked')
 			          ].reduce((p,a)=>p+Number(a.value),0)
 								"
 			></output>

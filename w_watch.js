@@ -1,22 +1,23 @@
 class WWatch {
   /**
    * @typedef {Object} WatcherConfig
-   * @property {HTMLElement} alvo - seletor css do alvo
+   * @property {HTMLElement} watch - seletor css do alvo
    * @property {string} tipo - pode ser um evento específico ou algum evento de mutação
    * @property {string} efeito - string sendo a função a ser disparada ao rodar o evento
    * @property {boolean} rodarSeco - se verdadeiro irá rodar um evento seco se possível
    */
   
-  atributoWWatcherConfigurado  = 'w-watch-ready'
+  atributoWWatcherConfigurado = 'w-watch-ready'
+  atributoWTriggerConfigurado = 'w-trigger-ready'
   
   chavesDeMutacao = ["childList", "attributes", "characterData", "subtree"];
   
   obterWTriggers() {
-    return document.querySelectorAll( `[w-watch]:not([${this.atributoWWatcherConfigurado}])`);
+    return document.querySelectorAll(`[w-trigger]:not([${this.atributoWTriggerConfigurado}])`);
   }
   
   obterWWatchers() {
-    return document.querySelectorAll("[w-watch]:not([w-watch-ready])");
+    return document.querySelectorAll(`[w-watch]:not([${this.atributoWWatcherConfigurado}])`);
   }
   
   /**
@@ -27,11 +28,11 @@ class WWatch {
     const watchList = watcher.getAttribute("w-watch").split(",");
     const watchConfigList = [];
     const efeitoPadrao = watcher.getAttribute('w-effect') ?? ''
-    watchList.forEach((watch, index) => {
-      const [seletor, tipo] = watch.split(":");
-      let alvo;
+    watchList.forEach((config, index) => {
+      const [seletor, tipo] = config.split(":");
+      let watch;
       try {
-        alvo = document.querySelector(seletor);
+        watch = document.querySelector(seletor);
       } catch {
         console.warn(`WWatch: não foi possível localizar o alvo`);
       }
@@ -41,10 +42,10 @@ class WWatch {
       ).trim();
       efeito = efeito ? efeito : efeitoPadrao
       // se faltar a definição do evento ou o efeito para ordem do evento a configuração não ocorrerá
-      if (!tipo || !efeito || !alvo) {
+      if (!tipo || !efeito || !watch) {
         console.warn(`WWatch: pulando configuração do seletor ${seletor}`);
       } else {
-        watchConfigList.push({alvo, tipo, efeito, rodarSeco});
+        watchConfigList.push({watch, tipo, efeito, rodarSeco});
       }
     });
     return watchConfigList;
@@ -55,11 +56,11 @@ class WWatch {
    * @param {HTMLElement} watcher
    * @param {WatcherConfig[]} watchConfigList
    */
-  adicionarEventos(watcher, watchConfigList) {
+  adicionarWWatchEventos(watcher, watchConfigList) {
     watchConfigList.forEach((watcherConfig) => {
-      const alvo = watcherConfig.alvo
+      const watch = watcherConfig.watch
       const func = new Function(watcherConfig.efeito)
-      watcher.alvo = alvo
+      watcher.watch = watch
       if (this.chavesDeMutacao.includes(watcherConfig.tipo)) {
         const observer = new MutationObserver((mutationsList, _) => {
           mutationsList.forEach((mutation) => {
@@ -68,9 +69,9 @@ class WWatch {
             }
           });
         });
-        observer.observe(watcherConfig.alvo, {[watcherConfig.tipo]: true});
+        observer.observe(watcherConfig.watch, {[watcherConfig.tipo]: true});
       } else {
-        watcherConfig.alvo.addEventListener(watcherConfig.tipo, (event) => {
+        watcherConfig.watch.addEventListener(watcherConfig.tipo, (event) => {
           func.call(watcher)
         })
       }
@@ -84,12 +85,18 @@ class WWatch {
   // TODO: add attributo para disparo de evento automático w-event-change="checkBoxAlterada" ou dinamico sendo w-event-mouseenter
   // TODO: add observer para rodar novamente a qualquer alteração na dom
   
-  inicializar() {
-    const listaWatchers = [...this.obterWWatchers()]
-    listaWatchers.forEach(watcher => {
-      const wathcerConfigs = this.obterConfiguracoesDoWatcher(watcher)
-      this.adicionarEventos(watcher, wathcerConfigs)
+  inicializarWWatchers() {
+    [...this.obterWWatchers()].forEach(watcher => {
+      this.adicionarWWatchEventos(watcher, this.obterConfiguracoesDoWatcher(watcher))
       watcher.setAttribute(this.atributoWWatcherConfigurado, '')
     })
+  }
+  
+  inicializarWTriggers(){
+    const listaWTriggers = [...this.obterWTriggers()]
+  }
+  
+  inicializar() {
+    this.inicializarWWatchers()
   }
 }

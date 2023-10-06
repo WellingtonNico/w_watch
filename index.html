@@ -15,7 +15,7 @@
 <div class="row justify-content-center py-5 mx-0">
 	<div class="col col-11 col-md-6 text-center">
 		<h1>W-Watch</h1>
-		
+
 		<br>
 		<br>
 
@@ -95,7 +95,7 @@
 			<div id="componente_2"
 			     style="background-color: blue"
 			     w-watch="#id_switch_2:change"
-			     w-effect-0="componente_1.style.display='none';this.style.display='block'"
+			     w-effect="componente_1.style.display='none';this.style.display='block'"
 			><h1>Componente 2</h1></div>
 		</div>
 
@@ -106,14 +106,13 @@
 
 		<h6>
 			<output w-watch="#id_tbody:childList"
-			        w-effect-0="this.value = this.alvo.children.length"></output>
+			        w-effect="this.value = this.alvo.children.length - 1"></output>
 			linhas exibidas
 		</h6>
 
 		<h6>
 			<output w-watch="#id_tbody:checkboxChange,#id_tbody:childList"
-			        w-effect-0="this.value = this.alvo.querySelectorAll('input:checked').length"
-			        w-effect-1="this.value = this.alvo.querySelectorAll('input:checked').length"
+			        w-effect="this.value = this.alvo.querySelectorAll('input:checked').length"
 			></output>
 			Checkbox Selecionadas
 		</h6>
@@ -121,11 +120,7 @@
 		<h6>
 			Total =
 			<output w-watch="#id_tbody:checkboxChange,#id_tbody:childList"
-			        w-effect-0="
-			          this.value =
-			            [...this.alvo.querySelectorAll('input:checked')].reduce((p,a)=>p+Number(a.value),0)
-								"
-			        w-effect-1="
+			        w-effect="
 			          this.value =
 			            [...this.alvo.querySelectorAll('input:checked')].reduce((p,a)=>p+Number(a.value),0)
 								"
@@ -140,33 +135,20 @@
 					<th></th>
 					<th>id</th>
 					<th>nome</th>
-					<th class="text-end">ação</th>
+					<th class="text-end">
+						<!-- botão para adicionar mais linhas -->
+						<button onclick="
+							const tr = document.createElement('tr')
+							tr.innerHTML = id_tbody.firstElementChild.innerHTML
+							tr.classList.remove('d-none')
+							id_tbody.appendChild(tr)"
+						        class="btn btn-primary">+
+						</button>
+					</th>
 				</tr>
 				</thead>
 				<tbody id="id_tbody">
-				<tr>
-					<td>
-						<input value="333" type="checkbox" class="form-check"
-						       onchange="id_tbody.dispatchEvent(new Event('checkboxChange'))">
-					</td>
-					<td>1</td>
-					<td>teste</td>
-					<td class="text-end">
-						<button onclick="this.closest('tr').remove()" class="btn btn-danger">remover</button>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<input value="333" type="checkbox" class="form-check"
-						       onchange="id_tbody.dispatchEvent(new Event('checkboxChange'))">
-					</td>
-					<td>1</td>
-					<td>teste</td>
-					<td class="text-end">
-						<button onclick="this.closest('tr').remove()" class="btn btn-danger">remover</button>
-					</td>
-				</tr>
-				<tr>
+				<tr class="d-none">
 					<td>
 						<input value="333" type="checkbox" class="form-check"
 						       onchange="id_tbody.dispatchEvent(new Event('checkboxChange'))">

@@ -172,7 +172,6 @@ class WWatch {
     const observer = new MutationObserver((mutationsList, _) => {
       mutationsList.forEach(mutation => {
         if (mutation.type === 'childList') {
-          console.log('ok')
           this.inicializarWWatchers()
           this.inicializarWTriggers()
         }
@@ -196,9 +195,11 @@ class WWatch {
   }
   
   inicializar() {
-    this.inicializarWWatchers()
-    this.inicializarWTriggers()
-    this.criarObserver()
+    document.addEventListener('DOMContentLoaded', () => {
+      this.inicializarWWatchers()
+      this.inicializarWTriggers()
+      this.criarObserver()
+    })
   }
 }
 

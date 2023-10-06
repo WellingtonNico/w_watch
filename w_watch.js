@@ -152,7 +152,6 @@ class WWatch {
    */
   despacharEvento(nome, target, dispacher) {
     const wEvento = new Event(nome, {bubbles: true, cancelable: true})
-    wEvento.target = target
     dispacher.dispatchEvent(wEvento)
   }
   

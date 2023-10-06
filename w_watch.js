@@ -17,7 +17,7 @@ class WWatch {
   atributoWWatcherConfigurado = 'w-watch-ready'
   atributoWTriggerConfigurado = 'w-trigger-ready'
   
-  chavesDeMutacao = ["childList", "attributes", "characterData", "subtree"];
+  chavesDeMutacao = ["childList", "attributes", "characterData"];
   
   obterWTriggers() {
     return document.querySelectorAll(`[w-trigger]:not([${this.atributoWTriggerConfigurado}])`);
@@ -86,7 +86,7 @@ class WWatch {
             }
           });
         });
-        observer.observe(wwatcherConfig.watch, {[wwatcherConfig.tipo]: true});
+        observer.observe(wwatcherConfig.watch, {[wwatcherConfig.tipo]: true, subtree: true});
       } else {
         wwatcherConfig.watch.addEventListener(wwatcherConfig.tipo, (event) => {
           func.call(wwatcher)
@@ -135,16 +135,6 @@ class WWatch {
     return wtriggerConfigs
   }
   
-  // TODO: add attributo para disparo de evento automático w-event-change="checkBoxAlterada" ou dinamico sendo w-event-mouseenter
-  // TODO: add observer para rodar novamente a qualquer alteração na dom
-  
-  inicializarWWatchers() {
-    [...this.obterWWatchers()].forEach(watcher => {
-      this.adicionarWWatchEventos(watcher, this.obterConfiguracoesDoWWatcher(watcher))
-      watcher.setAttribute(this.atributoWWatcherConfigurado, '')
-    })
-  }
-  
   /**
    * @param {string} nome
    * @param {Element} target
@@ -169,12 +159,32 @@ class WWatch {
             }
           });
         });
-        observer.observe(wtrigger, {[wtriggerConfig.tipo]: true});
+        observer.observe(wtrigger, {[wtriggerConfig.tipo]: true, subtree: true});
       } else {
         wtrigger.addEventListener(wtriggerConfig.tipo, (event) => {
           this.despacharEvento(wtriggerConfig.nomeEvento, wtrigger, wtriggerConfig.dispatcher)
         })
       }
+    })
+  }
+  
+  criarObserver() {
+    const observer = new MutationObserver((mutationsList, _) => {
+      mutationsList.forEach(mutation => {
+        if (mutation.type === 'childList') {
+          console.log('ok')
+          this.inicializarWWatchers()
+          this.inicializarWTriggers()
+        }
+      })
+    })
+    observer.observe(document, {childList: true, subtree: true})
+  }
+  
+  inicializarWWatchers() {
+    [...this.obterWWatchers()].forEach(watcher => {
+      this.adicionarWWatchEventos(watcher, this.obterConfiguracoesDoWWatcher(watcher))
+      watcher.setAttribute(this.atributoWWatcherConfigurado, '')
     })
   }
   
@@ -188,5 +198,6 @@ class WWatch {
   inicializar() {
     this.inicializarWWatchers()
     this.inicializarWTriggers()
+    this.criarObserver()
   }
 }

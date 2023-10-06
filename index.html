@@ -106,7 +106,7 @@
 
 		<h6>
 			<output w-watch="#id_tbody:childList"
-			        w-effect="this.value = this.watch.children.length - 1"></output>
+			        w-effect="this.value = this.watch.children.length"></output>
 			linhas exibidas
 		</h6>
 
@@ -129,6 +129,25 @@
 
 		</h6>
 
+		<script>
+
+      function adicionarLinhaNaTabela() {
+        const tr = document.createElement('tr')
+        tr.innerHTML = `
+					<td>
+						<input value="333" type="checkbox" class="form-check"
+					       w-trigger="change:checkboxChange">
+					</td>
+					<td>1</td>
+					<td>teste</td>
+					<td class="text-end">
+						<button onclick="this.closest('tr').remove()" class="btn btn-danger">remover</button>
+					</td>
+				`
+        id_tbody.appendChild(tr)
+      }
+		</script>
+
 		<div class="table-responsive">
 			<table class="table table-striped">
 				<thead>
@@ -138,28 +157,13 @@
 					<th>nome</th>
 					<th class="text-end">
 						<!-- botão para adicionar mais linhas -->
-						<button onclick="
-							const tr = document.createElement('tr')
-							tr.innerHTML = id_tbody.firstElementChild.innerHTML
-							tr.classList.remove('d-none')
-							id_tbody.appendChild(tr)"
+						<button onclick="adicionarLinhaNaTabela()"
 						        class="btn btn-primary">+
 						</button>
 					</th>
 				</tr>
 				</thead>
 				<tbody id="id_tbody">
-				<tr class="d-none">
-					<td>
-						<input value="333" type="checkbox" class="form-check"
-						       w-trigger="change:checkboxChange">
-					</td>
-					<td>1</td>
-					<td>teste</td>
-					<td class="text-end">
-						<button onclick="this.closest('tr').remove()" class="btn btn-danger">remover</button>
-					</td>
-				</tr>
 				<tr>
 					<td>
 						<input value="333" type="checkbox" class="form-check"

@@ -20,6 +20,7 @@ class WWatch {
   obterConfiguracoesDoWatcher(watcher) {
     const watchList = watcher.getAttribute("w-watch").split(",");
     const watchConfigList = [];
+    const efeitoPadrao = watcher.getAttribute('w-effect')??''
     watchList.forEach((watch, index) => {
       const [seletor, tipo] = watch.split(":");
       let alvo;
@@ -29,9 +30,10 @@ class WWatch {
         console.warn(`WWatch: não foi possível localizar o alvo`);
       }
       const rodarSeco = watcher.getAttribute(`w-effect-${index}-dry-run`)??'true'=='true'
-      const efeito = (
+      let efeito = (
         watcher.getAttribute(`w-effect-${index}`) ?? ""
       ).trim();
+      efeito = efeito?efeito:efeitoPadrao
       // se faltar a definição do evento ou o efeito para ordem do evento a configuração não ocorrerá
       if (!tipo || !efeito || !alvo) {
         console.warn(`WWatch: pulando configuração do seletor ${seletor}`);
@@ -51,7 +53,7 @@ class WWatch {
     watchConfigList.forEach((watcherConfig) => {
       const alvo = watcherConfig.alvo
       const func = new Function(watcherConfig.efeito)
-      watcher['alvo'] = alvo
+      watcher.alvo = alvo
       if (this.chavesDeMutacao.includes(watcherConfig.tipo)) {
         const observer = new MutationObserver((mutationsList, _) => {
           mutationsList.forEach((mutation) => {

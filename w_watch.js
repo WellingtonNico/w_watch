@@ -53,7 +53,7 @@ class WWatch {
       } catch {
         console.warn(`WWatch: não foi possível localizar o alvo`);
       }
-      const rodarSeco = watcher.getAttribute(`w-effect-${index}-dry-run`) ?? 'true' == 'true'
+      const rodarSeco = (watcher.getAttribute(`w-effect-${index}-dry-run`) ?? 'true') == 'true'
       let efeito = (
         watcher.getAttribute(`w-effect-${index}`) ?? ""
       ).trim();

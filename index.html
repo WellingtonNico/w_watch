@@ -21,7 +21,7 @@
 
 		<div class="d-flex flex-column">
 			<small class="my-3">Exemplo de atualização de componente diretamente no html</small>
-			
+
 			<!-- slider -->
 			<input id="id_input_range"
 			       type="range"
@@ -53,7 +53,7 @@
 					          this.parentNode.style.backgroundColor = bgColor
 					          this.parentNode.style.color = color
 									">
-						
+
 					</output>
 					%
 				</div>
@@ -96,27 +96,50 @@
 					<input name="name_teste" class="form-check-input" type="radio" role="switch" id="id_switch_2" checked>
 					<label class="form-check-label" for="id_switch_2">Exibe componente 2</label>
 				</div>
+
+				<!-- radio 3 -->
+				<div class="form-check form-switch">
+					<input name="name_teste" class="form-check-input" type="radio" role="switch" id="id_switch_3" checked>
+					<label class="form-check-label" for="id_switch_2">Exibe componente 3</label>
+				</div>
+
 			</div>
 
 			<!-- componente 1 -->
 			<div id="componente_1"
-			     class="bg-success"
 			     w-watch="
 			      #id_switch_1:change,
 			      #id_switch_1:mouseenter,
 			      #id_switch_1:mouseleave 
 					"
-			     w-effect-0="componente_2.style.display='none';this.style.display='block'"
-			     w-effect-1="componente_2.style.backgroundColor='yellow';"
-			     w-effect-2="componente_2.style.backgroundColor='blue'"
+			     componente
+			     w-effect-1="componente_1.style.backgroundColor='yellow';"
+			     w-effect-2="componente_1.style.backgroundColor='blue'"
+			     w-effect="
+			      [...document.querySelectorAll('[componente]')].forEach(c=>c.style.display='none')
+			      this.style.display='block'
+					"
 			><h1>Componente 1</h1></div>
 
 			<!-- componente 2 -->
-			<div id="componente_2"
-			     style="background-color: blue"
+			<div style="background-color: blue"
 			     w-watch="#id_switch_2:change"
-			     w-effect="componente_1.style.display='none';this.style.display='block'"
+			     componente
+			     w-effect="
+			      [...document.querySelectorAll('[componente]')].forEach(c=>c.style.display='none')
+			      this.style.display='block'
+					"
 			><h1>Componente 2</h1></div>
+
+			<!-- componente 2 -->
+			<div style="background-color: red;color: white"
+			     w-watch="#id_switch_3:change"
+			     componente
+			     w-effect="
+			      [...document.querySelectorAll('[componente]')].forEach(c=>c.style.display='none')
+			      this.style.display='block'
+					"
+			><h1>Componente 3</h1></div>
 		</div>
 
 		<br>
@@ -192,7 +215,9 @@
 					<td>1</td>
 					<td>teste</td>
 					<td class="text-end">
-						<button w-watch="closest tbody:click" w-effect="console.log('testando funcionamento')" onclick="this.closest('tr').remove()" class="btn btn-danger">remover</button>
+						<button w-watch="closest tbody:click" w-effect="console.log(this)" w-effect-0-dry-run="false"
+						        onclick="this.closest('tr').remove()" class="btn btn-danger">remover
+						</button>
 					</td>
 				</tr>
 				<tr>

@@ -262,23 +262,29 @@
 
 <style>
 
-    .ScrollHelper {
-        height: 50px;
-        -webkit-appearance: none;
-        margin: 10px 0;
-        width: 90px;
+    .ScrollHelperContainer {
         position: fixed;
         bottom: 50px;
         right: 50px;
+        transition: all 1s ease-in-out;
+        width: 90px;
+        height: 40px;
         transform: rotate(90deg);
-		    transition: all 1s ease-in-out;
+    }
+
+    .ScrollHelper {
+        height: 100%;
+        -webkit-appearance: none;
+        margin: 0;
+        width: 100%;
+        z-index: 10 !important;
     }
 
     .ScrollHelper::-webkit-slider-runnable-track {
-        width: 90px;
-        height: 50px;
+        width: 100%;
+        height: 100%;
         cursor: ns-resize !important;
-        background: white;
+        background: transparent;
         border-radius: 4px;
         border: 1px solid var(--bs-border-color-translucent);
     }
@@ -286,6 +292,7 @@
     .ScrollHelper::-webkit-slider-thumb {
         border: 3px solid var(--bs-primary);
         height: 100%;
+        z-index: 10 !important;
         border-radius: 5px;
         background: transparent;
         cursor: ns-resize !important;
@@ -294,40 +301,83 @@
 
 </style>
 
-		<!-- altera a largura  -->
-<style
-		w-watch="window:resize"
-		w-effect="
-			const alturaTotalDaJanela = document.querySelector('body').clientHeight
-			const alturaExibida = window.innerHeight
-			const larguraDoSlider = 90
-			const larguraDoThumb = alturaExibida * larguraDoSlider/alturaTotalDaJanela
-			this.innerHTML = `
-			    .ScrollHelper::-webkit-slider-thumb {
-			        width: ${larguraDoThumb}px;
-			    }
-			`
-"
->
-</style>
 
-<input
-		class="ScrollHelper shadow"
-		min="0" max="100"
-		type="range"
-		w-watch="window:scroll"
-		w-effect="
+<div class="ScrollHelperContainer shadow" style="pointer-events: none;opacity: 0">
+
+	<!-- cards simulando colunas ou linhas -->
+	<div style="position: absolute;pointer-events: none" class="d-flex gap-2 h-100 w-100 p-2">
+		<div class="card"></div>
+		<div class="card"></div>
+		<div class="card"></div>
+		<div class="card"></div>
+		<div class="card"></div>
+		<div class="card"></div>
+		<div class="card"></div>
+		<div class="card"></div>
+	</div>
+
+	<!-- altera a largura do thumb -->
+	<style
+			w-watch="window:resize"
+			w-effect="
+					const alturaTotalDaJanela = document.querySelector('body').scrollHeight
+					const alturaExibida = window.innerHeight
+					const larguraDoSlider = this.parentNode.clientWidth
+					const larguraDoThumb = alturaExibida * larguraDoSlider/alturaTotalDaJanela
+					this.innerHTML = `
+					    .ScrollHelper::-webkit-slider-thumb {
+					        width: ${larguraDoThumb}px;
+					    }
+					`
+			"
+	>
+	</style>
+	<input
+			class="ScrollHelper"
+			min="0" max="100"
+			type="range"
+			w-watch="window:scroll"
+			w-effect="
+					esconderOuExibirScrollHelper()
 					this.value = window.pageYOffset
 						/ (document.documentElement.scrollHeight
 						- document.documentElement.clientHeight)
 						* 100
 			"
-		oninput="
+			oninput="
 					const alturaExibida = document.documentElement.scrollHeight - document.documentElement.clientHeight
 					const top = this.value*alturaExibida/100
 					window.scrollTo({top,behavior:'instant'})
 		"
->
+	>
+</div>
+
+<script>
+  let scrollHelperInterval, ultimoScrollY
+
+  function tratarScroll() {
+    if (window.scrollY === ultimoScrollY) {
+      const scrollContainer = document.querySelector('.ScrollHelperContainer')
+      scrollContainer.style.opacity = '0'
+      scrollContainer.style.pointerEvents = 'none'
+      clearInterval(scrollHelperInterval)
+	    scrollHelperInterval = null
+    } else {
+      ultimoScrollY = window.scrollY
+    }
+  }
+
+  function esconderOuExibirScrollHelper() {
+    const scrollContainer = document.querySelector('.ScrollHelperContainer')
+    scrollContainer.style.opacity = '1'
+    scrollContainer.style.pointerEvents = 'all'
+    if (!scrollHelperInterval) {
+      scrollHelperInterval = setInterval(tratarScroll, 500)
+    }
+  }
+
+  document.addEventListener('scroll', esconderOuExibirScrollHelper)
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"

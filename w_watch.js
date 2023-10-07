@@ -44,10 +44,10 @@ class WWatch {
           watch = eval(seletor)
         } else if (seletor === 'this') {
           watch = watcher
-        } else if (seletor.includes(' ') ) {
-          const [funcName,param] = seletor.replace('  ',' ').split(' ')
+        } else if (seletor.includes(' ')) {
+          const [funcName, param] = seletor.replace('  ', ' ').split(' ')
           watch = watcher[funcName](param)
-        }  else{
+        } else {
           watch = document.querySelector(seletor);
         }
       } catch {
@@ -69,7 +69,6 @@ class WWatch {
   }
   
   /**
-   *
    * @param {HTMLElement} wwatcher
    * @param {WWatcherConfig[]} wwatcherConfigs
    */
@@ -86,9 +85,12 @@ class WWatch {
             }
           });
         });
-        observer.observe(wwatcherConfig.watch, {[wwatcherConfig.tipo]: true, subtree: true});
+        observer.observe(watch, {[wwatcherConfig.tipo]: true, subtree: true});
       } else {
-        wwatcherConfig.watch.addEventListener(wwatcherConfig.tipo, (event) => {
+        watch[`trigger_${wwatcherConfig.tipo}`] = () => {
+          this.despacharEvento(wwatcherConfig.tipo,watch,watch)
+        }
+        watch.addEventListener(wwatcherConfig.tipo, (event) => {
           func.call(wwatcher)
         })
       }
@@ -96,6 +98,17 @@ class WWatch {
         func.call(wwatcher)
       }
     });
+  }
+  
+  /**
+   * capitaliza uma palavra
+   * @param {string} palavra
+   * @returns {string}
+   */
+  capitalizar(palavra) {
+    const primeiraLetra = palavra.charAt(0).toUpperCase()
+    const letrasRestantes = palavra.substring(1)
+    return [primeiraLetra, ...letrasRestantes].join('')
   }
   
   /**
@@ -109,16 +122,16 @@ class WWatch {
     triggers.forEach(trigger => {
       let [tipo, nomeEvento, seletorDispatcher] = trigger.trim().split(':')
       if (!seletorDispatcher) {
-        seletorDispatcher = 'document'
+        seletorDispatcher = 'this'
       }
       let dispatcher
       try {
         if (['document', 'window'].includes(seletorDispatcher)) {
           dispatcher = eval(seletorDispatcher)
         } else if (seletorDispatcher === 'this') {
-          dispatcher = seletorDispatcher
-        }else if (seletorDispatcher.includes(' ')){
-          const [funcName,param] = seletorDispatcher.replace('  ',' ').split(' ')
+          dispatcher = wtrigger
+        } else if (seletorDispatcher.includes(' ')) {
+          const [funcName, param] = seletorDispatcher.replace('  ', ' ').split(' ')
           dispatcher = wtrigger[funcName](param)
         } else {
           dispatcher = document.querySelector(seletorDispatcher);
@@ -139,11 +152,11 @@ class WWatch {
   /**
    * @param {string} nome
    * @param {Element} target
-   * @param {Element} dispacher
+   * @param {Element} dispatcher
    */
-  despacharEvento(nome, target, dispacher) {
+  despacharEvento(nome, target, dispatcher) {
     const wEvento = new Event(nome, {bubbles: true, cancelable: true})
-    dispacher.dispatchEvent(wEvento)
+    dispatcher.dispatchEvent(wEvento)
   }
   
   /**
@@ -152,18 +165,22 @@ class WWatch {
    */
   adicionarWTriggerEventos(wtrigger, wtriggerConfigs) {
     wtriggerConfigs.forEach(wtriggerConfig => {
+      const dispatcher =   wtriggerConfig.dispatcher
       if (this.chavesDeMutacao.includes(wtriggerConfig.tipo)) {
         const observer = new MutationObserver((mutationsList, _) => {
           mutationsList.forEach((mutation) => {
             if (mutation.type === wtriggerConfig.tipo) {
-              this.despacharEvento(wtriggerConfig.nomeEvento, wtrigger, wtriggerConfig.dispatcher)
+              this.despacharEvento(wtriggerConfig.nomeEvento, wtrigger,dispatcher)
             }
           });
         });
         observer.observe(wtrigger, {[wtriggerConfig.tipo]: true, subtree: true});
       } else {
+        wtrigger[`trigger_${wtriggerConfig.nomeEvento}`] = ()=>{
+          this.despacharEvento(wtriggerConfig.nomeEvento,wtrigger,dispatcher)
+        }
         wtrigger.addEventListener(wtriggerConfig.tipo, (event) => {
-          this.despacharEvento(wtriggerConfig.nomeEvento, wtrigger, wtriggerConfig.dispatcher)
+          this.despacharEvento(wtriggerConfig.nomeEvento, wtrigger, dispatcher)
         })
       }
     })

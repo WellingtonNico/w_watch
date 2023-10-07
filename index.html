@@ -201,7 +201,10 @@
 					<th class="text-end">
 						<!-- botão para adicionar mais linhas -->
 						<button onclick="adicionarLinhaNaTabela()"
-						        class="btn btn-primary">+
+						        class="btn btn-primary"
+						        w-trigger="click:eventoTeste"
+						        id="id_botao_teste"
+						>+
 						</button>
 					</th>
 				</tr>
@@ -278,6 +281,7 @@
         margin: 0;
         width: 100%;
         z-index: 10 !important;
+		    border-radius: 5px;
     }
 
     .ScrollHelper::-webkit-slider-runnable-track {
@@ -337,13 +341,14 @@
 			min="0" max="100"
 			type="range"
 			w-watch="window:scroll"
-			w-effect="
-					esconderOuExibirScrollHelper()
+			w-effect-0="
 					this.value = window.pageYOffset
 						/ (document.documentElement.scrollHeight
 						- document.documentElement.clientHeight)
 						* 100
 			"
+			onmouseenter="this.parentNode.classList.add('mouse-in')"
+			onmouseleave="this.parentNode.classList.remove('mouse-in')"
 			oninput="
 					const alturaExibida = document.documentElement.scrollHeight - document.documentElement.clientHeight
 					const top = this.value*alturaExibida/100
@@ -356,12 +361,15 @@
   let scrollHelperInterval, ultimoScrollY
 
   function tratarScroll() {
-    if (window.scrollY === ultimoScrollY) {
-      const scrollContainer = document.querySelector('.ScrollHelperContainer')
+    const scrollContainer = document.querySelector('.ScrollHelperContainer')
+
+	  // a classe mouse-in é adicionada ao container quando o mouse está cima e removida quando o mouse sai
+    if (window.scrollY === ultimoScrollY && !scrollContainer.classList.contains('mouse-in')) {
+      console.log('devia parar ')
       scrollContainer.style.opacity = '0'
       scrollContainer.style.pointerEvents = 'none'
       clearInterval(scrollHelperInterval)
-	    scrollHelperInterval = null
+      scrollHelperInterval = null
     } else {
       ultimoScrollY = window.scrollY
     }

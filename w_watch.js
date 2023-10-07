@@ -44,11 +44,11 @@ class WWatch {
           watch = eval(seletor)
         } else if (seletor === 'this') {
           watch = watcher
-        } else {
+        } else if (seletor.includes(' ') ) {
+          const [funcName,param] = seletor.replace('  ',' ').split(' ')
+          watch = watcher[funcName](param)
+        }  else{
           watch = document.querySelector(seletor);
-        }
-        if (!watch) {
-          throw new Error()
         }
       } catch {
         console.warn(`WWatch: não foi possível localizar o alvo`);
@@ -117,12 +117,13 @@ class WWatch {
           dispatcher = eval(seletorDispatcher)
         } else if (seletorDispatcher === 'this') {
           dispatcher = seletorDispatcher
+        }else if (seletorDispatcher.includes(' ')){
+          const [funcName,param] = seletorDispatcher.replace('  ',' ').split(' ')
+          dispatcher = wtrigger[funcName](param)
         } else {
           dispatcher = document.querySelector(seletorDispatcher);
         }
-        if (!dispatcher) {
-          throw new Error()
-        }
+        
         if (!tipo || !nomeEvento) {
           console.warn(`WWatch: pulando configuração do wtrigger `, wtrigger);
         } else {

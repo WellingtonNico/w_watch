@@ -53,7 +53,7 @@
 					          this.parentNode.style.backgroundColor = bgColor
 					          this.parentNode.style.color = color
 									">
-						50.0
+						
 					</output>
 					%
 				</div>
@@ -192,7 +192,7 @@
 					<td>1</td>
 					<td>teste</td>
 					<td class="text-end">
-						<button onclick="this.closest('tr').remove()" class="btn btn-danger">remover</button>
+						<button w-watch="closest tbody:click" w-effect="console.log('testando funcionamento')" onclick="this.closest('tr').remove()" class="btn btn-danger">remover</button>
 					</td>
 				</tr>
 				<tr>

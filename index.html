@@ -21,7 +21,7 @@
 
 		<div class="d-flex flex-column">
 			<small class="my-3">Exemplo de atualização de componente diretamente no html</small>
-
+			
 			<!-- slider -->
 			<input id="id_input_range"
 			       type="range"
@@ -33,10 +33,10 @@
 			<div class="position-relative bg-success overflow-visible mt-1">
 
 				<!-- span com porcentagem -->
-				<span class="d-flex rounded px-2 position-absolute"
-				      style="background-color: red;left:calc(50%);transform:translateX(-50%)">
+				<div class="d-flex rounded px-2 position-absolute"
+				     style="background-color: red;left:calc(50%);transform:translateX(-50%)">
 					<output w-watch="#id_input_range:input"
-					        w-effect-0="
+					        w-effect="
 					          this.value=Number(this.watch.value).toFixed(1)
 					          this.parentNode.style.left=`calc(${this.watch.value}%)`
 					          let bgColor,color
@@ -56,9 +56,25 @@
 						50.0
 					</output>
 					%
-				</span>
+				</div>
 
 			</div>
+		</div>
+
+		<br>
+		<br>
+		<br>
+
+		<div>
+			<small>Atualizar componente baseado na escrita</small>
+			<p>
+				<label for="id_input_text">Teste</label>
+				<input id="id_input_text" type="text" class="form-control" placeholder="Digite algo aqui"/>
+			</p>
+			<p>
+				<b w-watch="#id_input_text:input"
+				   w-effect="this.innerHTML=this.watch.value?this.watch.value:'Digite algo acima'"></b>
+			</p>
 		</div>
 
 		<br>
@@ -115,7 +131,7 @@
 		</h6>
 
 		<h6>
-			<output w-watch="document:checkboxChange,#id_tbody:childList"
+			<output w-watch="#id_tbody:childList,#id_tbody:click"
 			        w-effect="this.value = this.watch.querySelectorAll('input:checked').length"
 			></output>
 			Checkbox Selecionadas
@@ -123,7 +139,7 @@
 
 		<h6>
 			Total =
-			<output w-watch="document:checkboxChange,#id_tbody:childList"
+			<output w-watch="#id_tbody:childList,#id_tbody:click"
 			        w-effect="
 			          this.value = [
 			            ...this.watch.querySelectorAll('input:checked')
@@ -140,7 +156,7 @@
         tr.innerHTML = `
 					<td>
 						<input value="333" type="checkbox" class="form-check"
-					       w-trigger="change:checkboxChange">
+					       >
 					</td>
 					<td>1</td>
 					<td>teste</td>
@@ -171,7 +187,7 @@
 				<tr>
 					<td>
 						<input value="333" type="checkbox" class="form-check"
-						       w-trigger="change:checkboxChange">
+						>
 					</td>
 					<td>1</td>
 					<td>teste</td>
@@ -182,7 +198,7 @@
 				<tr>
 					<td>
 						<input value="333" type="checkbox" class="form-check"
-						       w-trigger="change:checkboxChange">
+						>
 					</td>
 					<td>1</td>
 					<td>teste</td>
@@ -193,7 +209,7 @@
 				<tr>
 					<td>
 						<input value="333" type="checkbox" class="form-check"
-						       w-trigger="change:checkboxChange">
+						>
 					</td>
 					<td>1</td>
 					<td>teste</td>
@@ -204,7 +220,7 @@
 				<tr>
 					<td>
 						<input value="333" type="checkbox" class="form-check"
-						       w-trigger="change:checkboxChange">
+						>
 					</td>
 					<td>1</td>
 					<td>teste</td>

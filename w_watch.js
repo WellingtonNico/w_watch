@@ -1,3 +1,10 @@
+/**
+ *    WWatch
+ *
+ *    v 1.0.0
+ *
+ *
+ */
 class WWatch {
   /**
    * @typedef {Object} WWatcherConfig
@@ -37,7 +44,7 @@ class WWatch {
     const watchConfigList = [];
     const efeitoPadrao = watcher.getAttribute('w-effect') ?? ''
     watchList.forEach((config, index) => {
-      const [seletor, tipo] = config.trim().split(":");
+      const [seletor, tipo,rodar] = config.trim().split(":");
       let watch;
       try {
         if (['document', 'window'].includes(seletor)) {
@@ -53,7 +60,7 @@ class WWatch {
       } catch {
         console.warn(`WWatch: não foi possível localizar o alvo`);
       }
-      const rodarSeco = (watcher.getAttribute(`w-effect-${index}-dry-run`) ?? 'true') == 'true'
+      const rodarSeco = (rodar ?? 'true') !== 'false'
       let efeito = (
         watcher.getAttribute(`w-effect-${index}`) ?? ""
       ).trim();
@@ -122,7 +129,7 @@ class WWatch {
     triggers.forEach(trigger => {
       let [tipo, nomeEvento, seletorDispatcher] = trigger.trim().split(':')
       if (!seletorDispatcher) {
-        seletorDispatcher = 'this'
+        seletorDispatcher = 'document'
       }
       let dispatcher
       try {

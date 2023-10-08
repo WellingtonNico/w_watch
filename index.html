@@ -309,7 +309,7 @@
 <div class="ScrollHelperContainer shadow" style="pointer-events: none;opacity: 0">
 
 	<!-- cards simulando colunas ou linhas -->
-	<div style="position: absolute;pointer-events: none" class="d-flex gap-2 h-100 w-100 p-2">
+	<div style="position: absolute;pointer-events: none" class="d-flex gap-2 h-100 w-100 p-2 justify-content-evenly">
 		<div class="card"></div>
 		<div class="card"></div>
 		<div class="card"></div>
@@ -330,7 +330,7 @@
 					const larguraDoThumb = alturaExibida * larguraDoSlider/alturaTotalDaJanela
 					this.innerHTML = `
 					    .ScrollHelper::-webkit-slider-thumb {
-					        width: ${larguraDoThumb}px;
+					        width: ${larguraDoThumb}px !important;
 					    }
 					`
 			"
@@ -347,8 +347,8 @@
 						- document.documentElement.clientHeight)
 						* 100
 			"
-			onmouseenter="this.parentNode.classList.add('mouse-in')"
-			onmouseleave="this.parentNode.classList.remove('mouse-in')"
+			onmouseenter="this.parentNode.mouseOver = true"
+			onmouseleave="this.parentNode.mouseOver = false"
 			oninput="
 					const alturaExibida = document.documentElement.scrollHeight - document.documentElement.clientHeight
 					const top = this.value*alturaExibida/100
@@ -364,7 +364,7 @@
     const scrollContainer = document.querySelector('.ScrollHelperContainer')
 
 	  // a classe mouse-in é adicionada ao container quando o mouse está cima e removida quando o mouse sai
-    if (window.scrollY === ultimoScrollY && !scrollContainer.classList.contains('mouse-in')) {
+    if (window.scrollY === ultimoScrollY && !scrollContainer.mouseOver) {
       console.log('devia parar ')
       scrollContainer.style.opacity = '0'
       scrollContainer.style.pointerEvents = 'none'

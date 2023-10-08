@@ -5,6 +5,11 @@ permitindo que que a lógica de atualização de componente fique no elemento
 que precisa ser atualizado e não no elemento que irá gerar os gatilhos
 
 
+## Acesse a demo
+[acessar demonstração](https://wellingtonnico.github.io/w_watch/)
+
+
+
 ## como usar?
 * inclua no seu template
 ```html

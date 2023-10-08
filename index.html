@@ -93,6 +93,54 @@
 		<br>
 		<br>
 
+		<div class="text-center position-relative" >
+		<input class="position-absolute" required type="file" multiple hidden="" id="id_input_file">
+			<button class="btn btn-outline-success" onclick="id_input_file.click()">Selecione um arquivo</button>
+
+				<div class="text-center my-3">
+
+					<!-- botão para limpar seleção de arquivos -->
+					<button class="btn btn-sm btn-danger"
+					        w-watch="#id_input_file:change"
+					        w-effect="
+					           if (this.watch.files.length===0){
+							          this.style.display='none'
+							        }else{
+							          this.style.display=''
+							        }
+									"
+					        onclick="id_input_file.files.length=0;id_input_file.trigger_change()"
+						>Limpar</button>
+					
+					<output w-watch="#id_input_file:change"
+					      w-effect="
+					        if (this.watch.files.length===0){
+					          this.value = 'Nenhum arquivo selecionado'
+					        }else{
+					          this.value = `${this.watch.files.length} arquivo(s) selecionado(s)`
+					        }
+								"
+					></output>
+
+
+				</div>
+
+				<div w-watch="#id_input_file:change"
+				        w-effect="
+				          const files = this.watch.files
+				          if (files.length===0){
+				            this.innerHTML
+				          }else{
+				          }
+								"
+				></div>
+
+		</div>
+
+		<br>
+		<br>
+		<br>
+
 		<div>
 			<small>Ocultar e exibir componentes</small>
 			<div class="d-flex justify-content-between">

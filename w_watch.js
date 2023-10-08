@@ -94,9 +94,6 @@ class WWatch {
         });
         observer.observe(watch, {[wwatcherConfig.tipo]: true, subtree: true});
       } else {
-        watch[`trigger_${wwatcherConfig.tipo}`] = () => {
-          this.despacharEvento(wwatcherConfig.tipo,watch,watch)
-        }
         watch.addEventListener(wwatcherConfig.tipo, (event) => {
           func.call(wwatcher)
         })
@@ -183,9 +180,6 @@ class WWatch {
         });
         observer.observe(wtrigger, {[wtriggerConfig.tipo]: true, subtree: true});
       } else {
-        wtrigger[`trigger_${wtriggerConfig.nomeEvento}`] = ()=>{
-          this.despacharEvento(wtriggerConfig.nomeEvento,wtrigger,dispatcher)
-        }
         wtrigger.addEventListener(wtriggerConfig.tipo, (event) => {
           this.despacharEvento(wtriggerConfig.nomeEvento, wtrigger, dispatcher)
         })

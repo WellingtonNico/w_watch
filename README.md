@@ -128,3 +128,19 @@ neste caso o evento será disparado pela `tbody` que contém dentro o input acim
 ou não que você defina o atribudo `w-watch` para ouvir o evento customizado `checkFeitoNaTabelaProdutos`
 vindo especificamente da tabela que deseja
 
+
+## Plus
+como eventos tipo `change` e outros não são disparados ao alterar um elemento via javascript
+temos que disparar eventos "manualmente", comumente usamos jquery, mas esta lib também te permite
+não ser necessário jquery! Ao usar o atributo `w-watcher` ou `w-trigger` o alvo selecionado ou o despachante
+ganha uma função que você pode chamar para disparar seu evento. Ex:
+
+```html
+<!-- neste caso o input abaixo ganha a funçnao "trigger_checkBoxAlterada" -->
+<input id="id_input" w-trigger="change:checkBoxAlterada" type="checkbox">
+
+<!-- neste caso o input com id "id_input" também recebe a função "trigger_checkBoxAlterada" -->
+<output w-watch="#id_input:checkBoxAlterada"> </output>
+```
+
+

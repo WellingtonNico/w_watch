@@ -3,6 +3,7 @@
  *
  *    v 1.0.0
  *
+ *    github: https://github.com/WellingtonNico/w_watch
  *
  */
 class WWatch {
